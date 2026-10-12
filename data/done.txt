@@ -1,0 +1,3 @@
+Fixed login authentication issue
+Completed customer search API
+Reviewed pull request for profile module
