@@ -36,18 +36,22 @@ def ensure_three_sentences(text):
 
 
 def generate_ai_standup(done_tasks, in_progress_tasks):
+
+    # First try the local .env file
     api_key = os.getenv("GEMINI_API_KEY")
 
-if not api_key:
-    try:
-        import streamlit as st
-        api_key = st.secrets.get("GEMINI_API_KEY")
-    except (FileNotFoundError, KeyError):
-        pass
+    # If running on Streamlit Cloud, use Streamlit Secrets
+    if not api_key:
+        try:
+            import streamlit as st
+            api_key = st.secrets["GEMINI_API_KEY"]
+        except Exception:
+            api_key = None
 
     if not api_key:
         raise ValueError(
-            "GEMINI_API_KEY is missing from .env"
+            "GEMINI_API_KEY is missing. "
+            "Configure it in .env or Streamlit Secrets."
         )
 
     client = genai.Client(
